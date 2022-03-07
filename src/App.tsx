@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
 import { RootState } from "./app/store";
+import CustomerCard from "./components/CustomerCard";
 import ReservationCard from "./components/ReservationCard";
 import { addReservation } from "./redux-features/reservationSlice";
 
@@ -10,14 +11,21 @@ function App() {
   // function handleClientNameInput () {
   //   setClientName(target.value)
   // }
+
+  //state set up
   const [clientNameInput, setClientNameInput] = useState("");
 
+  //useSelectors
   const reservations = useSelector(
     (state: RootState) => state.reservations.value
   );
 
+  const customers = useSelector((state: RootState) => state.customer.value);
+
+  //dispatching actions
   const dispatch = useDispatch();
 
+  //handler fn's
   const handleAddReservation = () => {
     if (!clientNameInput) return;
 
@@ -45,19 +53,16 @@ function App() {
             <button onClick={handleAddReservation}>Add</button>
           </div>
         </div>
-
-        <div className="customer-food-container">
-          <div className="customer-food-card-container">
-            <p>Selena Gomez</p>
-            <div className="customer-foods-container">
-              <div className="customer-food"></div>
-              <div className="customer-food-input-container">
-                <input />
-                <button>Add</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {customers.map((client) => {
+          return (
+            <CustomerCard
+              id={client.id}
+              name={client.name}
+              food={client.food}
+            />
+          );
+        })}
+        <div className="customer-food-container"></div>
       </div>
     </div>
   );
